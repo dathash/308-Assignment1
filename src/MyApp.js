@@ -20,6 +20,10 @@ function MyApp() {
     async function makePostCall(person) {
         try {
             const response = await axios.post('http://127.0.0.1:5000/users', person);
+            if (response.status !== 201) {
+                throw new Error("Bad response code")
+            }
+
             return response;
         }
         catch (error) {
@@ -45,7 +49,7 @@ function MyApp() {
     function updateList(person) {
         makePostCall(person).then(result => {
             if (result)
-                setCharacters([...characters, person]);
+                setCharacters([...characters, result.data]);
         });
     }
     
