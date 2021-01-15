@@ -23,7 +23,20 @@ function MyApp() {
             if (response.status !== 201) {
                 throw new Error("Bad response code")
             }
+            return response;
+        }
+        catch (error) {
+            console.log(error);
+            return false;
+        }
+    }
 
+    async function makeDeleteCall(person) {
+        try {
+            const response = await axios.delete('http://127.0.0.1:5000/users/'.concat(person['id']))
+            if (response.status !== 204) {
+                throw new Error("Bad response code")
+            }
             return response;
         }
         catch (error) {
@@ -40,6 +53,7 @@ function MyApp() {
     }, []);
 
     function removeOneCharacter(index) {
+        makeDeleteCall(characters[index])
         const updated = characters.filter((character, i) => {
             return i !== index
         });
@@ -52,7 +66,8 @@ function MyApp() {
                 setCharacters([...characters, result.data]);
         });
     }
-    
+
+
     return (
         <div className="container">
             <Table characterData={characters} removeCharacter={removeOneCharacter} />
